@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>test page</title>
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  
+  
+</head>
+<body>
+
+</body>
+
+ <script>
+let aWrappedPromise = 
+		(count)=>
+		{
+			return new Promise
+			(
+				(resolve, reject)=>
+				{	
+					
+					let rn = Math.floor(Math.random() * 90 + 10);
+					console.log(rn + " --- " + count);
+					((rn % 2) === 0)?
+					resolve({"val":rn, "count": ++count})
+					:reject(rn + " is not even. ");
+					
+				}		
+			);
+		}
+		
+
+	let count = 0;
+	aWrappedPromise(count)
+	.then
+	(
+		(val)=>
+		{		
+		 console.log(val.val + " is even. Let's try again");
+		 return aWrappedPromise(val.count);
+		}			
+	)	
+	.then
+	(
+		(val)=>
+		{		
+		 console.log(val.val + " is even. Let's try again");
+		 return aWrappedPromise(val.count);
+		}			
+	)	
+	
+	.then
+	(
+		(val)=>
+		{		
+			console.log(val.val + " is even. Last one. Count = " + val.count)
+			
+		}			
+	)
+	.catch
+	(
+		(err)=>
+		{		
+			console.log(err)
+		}
+	)
+	
+	
+ 
+ 
+  </script>
+ 
+</html>
