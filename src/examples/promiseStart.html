@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+<head>
+
+<title>test page</title>
+
+<script>
+let promiseOneWrapper = 
+	(count)=>
+	{
+
+		return new Promise
+		(
+			(resolve, reject)=>
+			{
+			
+				let rn = Math.floor(Math.random() * 90 + 10);
+				(rn %2 === 0)?
+				resolve(rn)
+				:reject(Error(rn + " is not even"));
+			}
+		);	
+	}
+	
+	
+promiseOneWrapper()
+.then
+(
+	(val)=>
+	{
+		console.log("1Even number = " + val);
+		return promiseOneWrapper();
+	}
+) 
+.then
+(
+	(val)=>
+	{
+		console.log("2Even number = " + val);
+		
+	}
+) 
+.catch
+(
+	(err)=>
+	{
+		console.log(err);
+		
+	}
+) 
+</script>
+</head>
+<body>
+
+</body>
+
+ 
+</html>
