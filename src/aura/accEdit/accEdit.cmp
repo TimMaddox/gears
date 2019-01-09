@@ -1,0 +1,40 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="accountRecord" type="Object" />
+    <aura:attribute name="recordSaveError" type="Object" />
+    <force:recordData aura:id="accountRecord" recordId="{!v.recordId}"
+                      targetRecord ="{!v.record}"
+                      targetFields ="{!v.accountRecord}"
+                      fields="Id, Name, Industry, Description, Phone"
+                      mode="EDIT"
+                      targetError="{!v.recordSaveError}"/>
+    
+    
+    
+
+    <lightning:card footer="Bottom info" title="{!v.accountRecord.Name}">
+        <p class="slds-p-horizontal_small">
+            <div>
+                <lightning:input label="Account Name" value="{!v.accountRecord.Name}" />
+            </div>
+            <div>
+                <lightning:button label="Save Account" onclick="{! c.saveAccount }"/>
+            </div>
+            
+        </p>
+    </lightning:card>
+    <!-- Display error message -->
+    
+        <aura:if isTrue="{!not(empty(v.recordSaveError))}">
+            <div class="recordError">
+                {!v.recordSaveError}
+            </div>
+        </aura:if>   
+        
+    
+    
+</aura:component>
