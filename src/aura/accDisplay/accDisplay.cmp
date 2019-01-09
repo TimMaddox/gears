@@ -1,0 +1,38 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    
+    
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="record" type="Object" />
+    <aura:attribute name="recordSaveError" type="Object" />
+    <aura:attribute name="accountRecord" type="Object" />
+    <force:recordData aura:id="accountRecord" recordId="{!v.recordId}"
+                      targetRecord ="{!v.record}"
+                      targetFields ="{!v.accountRecord}"
+                      fields="Id, Name, Industry, Description, Phone"
+                      mode="VIEW"
+                      targetError="{!v.recordSaveError}"
+                      recordUpdated="{!c.recordUpdated}"/>
+    
+    
+    
+    
+<lightning:card footer="Bottom info" title="{!v.accountRecord.Name}">
+        <p class="slds-p-horizontal_small">
+            <div>
+                <lightning:formattedText title="Name" value="{!v.accountRecord.Name}" />
+            </div>            
+            <div>
+                <lightning:formattedText title="Industry" value="{!v.accountRecord.Industry}" />
+            </div>
+            <div>
+                <lightning:formattedText title="Description" value="{!v.accountRecord.Description}" />
+            </div>
+            <div>
+                <lightning:formattedPhone title="Phone" value="{!v.accountRecord.Phone}" />
+            </div>
+    </p>
+    </lightning:card>
+    
+    
+</aura:component>

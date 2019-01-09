@@ -1,0 +1,15 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:registerEvent name="buttonEvent" type="c:detachedButtonEvent"/>
+    <aura:attribute name="gearRatioInChild" type="Decimal" default="0.0"/>
+
+    <div style="clear:both;">
+        <lightning:button variant="brand" label="Shift" onclick="{!c.fireButtonEvent}">
+        </lightning:button>
+        <p>
+            Current Gear Ratio:
+            <lightning:formattedNumber value="{!v.gearRatioInChild}" style="decimal" class="large-text" minimumFractionDigits="1" minimumIntegerDigits="1" />
+            
+        </p>
+    </div>
+    
+</aura:component>

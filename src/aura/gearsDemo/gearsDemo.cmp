@@ -1,0 +1,74 @@
+<aura:component controller="BikeLightningService" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    
+    <aura:attribute name="currentFrontGear" type="Integer" default="0"/>
+    <aura:attribute name="currentRearGear" type="Integer" default="0"/>
+    <aura:attribute name="frontGears" type="Object[]"/>
+    <aura:attribute name="rearGears" type="Object[]"/>
+    <aura:attribute name="gearRatio" type="Decimal" default="0.0"/>
+    <lightning:notificationsLibrary aura:id="notifLib"/>
+  
+    
+    <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
+    <!-- Event handler for button event -->
+    <aura:handler name="buttonEvent" event="c:detachedButtonEvent" action="{!c.executeShift}"/>
+    <aura:attribute name="messageFromEvent" type="String"/>
+    <aura:method name="reload" action="{!c.handleInit}" access="public" description="Allow explicit reload from other components"/>
+
+    <div> 
+        <article class="slds-card">
+            <div class="slds-card__header slds-grid">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                    <div class="slds-media__figure">
+                        <span class="slds-icon_container" title="account">
+                            <lightning:icon iconName="utility:automate" size="medium" />
+                            <span class="slds-assistive-text">gears test page</span>
+                        </span>
+                    </div>
+                    <div class="slds-media__body">
+                        <h2 class="slds-card__header-title">
+                            <a href="javascript:void(0);" class="slds-card__header-link slds-truncate" title="Gears">
+                                <span>Gears test page</span>
+                            </a>
+                        </h2>
+                    </div>
+                    <div class="slds-no-flex">
+                        <!--<button class="slds-button slds-button_neutral">New</button>-->
+                    </div>
+                </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">
+                <div class="body-content" style="padding: 1em; float: left; display:inline;">
+                    
+                    <lightning:select aura:id="chainring" onchange="{!c.setChainRing}" label="Select a chainring.">
+                        <option value="none">None</option>
+                        <option value="front">Front</option>
+                        <option value="rear">Rear</option>
+                    </lightning:select>
+                    <lightning:select aura:id="shiftUpOrDown" onchange="{!c.setUpOrDown}"  label="Shift up or down?">
+                        <option value="none">None</option>
+                        <option value="up">Up</option>
+                        <option value="down">Down</option>
+                    </lightning:select>        
+                    
+                </div>
+                <div class="body-content" style="padding:1em; float: left; display:inline;">
+                    <!-- controls to change the gears go here -->
+                    <lightning:select aura:id="front" name="front" label="Front " onchange="{!c.handleSelectChange}" value="{!v.currentFrontGear}">
+                        <aura:iteration items="{!v.frontGears}" var="item">
+                            <option value="{!item.index}">{!item.value}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                    <lightning:select aura:id="rear" name="rear" label="Rear" onchange="{!c.handleSelectChange}" value="{!v.currentRearGear}">
+                        <aura:iteration items="{!v.rearGears}" var="item">
+                            <option value="{!item.index}">{!item.value}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                    
+                </div>                
+            </div>
+            <footer class="slds-card__footer">
+                <c:detachedButton gearRatioInChild="{!v.gearRatio}" />
+            </footer>
+        </article>
+    </div>
+</aura:component>
