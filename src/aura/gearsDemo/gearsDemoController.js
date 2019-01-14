@@ -1,8 +1,11 @@
 (
     {
         handleInit : function(component, event, helper) {        
-            helper.getGears(component);
+            helper.getGearSet(component);
         },
+        handleGearPopulation : function(component, event, helper) {
+            helper.getGears(component);  
+        },        
         handleSelectChange : function(component, event, helper) {
             helper.setGearRatio(component);  
         },

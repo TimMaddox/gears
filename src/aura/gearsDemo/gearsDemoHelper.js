@@ -1,26 +1,20 @@
 ({
-    
-    
-    
-    
-    processGears: function(component,gearsForBike)
+    processGears: function(component,name, gearsForBike)
     {
-        let frontGears = [], 
-            rearGears = [];
-
-        gearsForBike["bikegears"].forEach
+        let gears = []
+        
+        JSON.parse(gearsForBike).forEach
         (
             (item)=>
-            {
-                (item.Gear_Type__c === "Front (Drive)")?
-                frontGears.push(item.Bike_Gear_Teeth__r)
-                :
-                rearGears.push(item.Bike_Gear_Teeth__r)
+            {                
+                gears.push(item.gearteeth__c)                
             }
         );
         
-        const frontList = 
-        frontGears.map
+        gears.reverse(gears.sort());
+                
+        const list = 
+        gears.map
         (
             (item, index)=>
         	{
@@ -29,34 +23,49 @@
             			};
              }
         );
-        const rearList = 
-        rearGears.map
+        
+        
+        component.set("v." + name + "Gears", list);
+                
+           
+    },
+    processGearSet :function(component, gearSetToProcess)
+    {
+        let gearSet = []
+        
+        JSON.parse(gearSetToProcess).forEach
+        (
+            (item)=>
+            {                
+                gearSet.push(item.Name)                
+            }
+        ); 
+        gearSet.reverse(gearSet.sort());
+                
+        const list = 
+        gearSet.map
         (
             (item, index)=>
-            {
+        	{
             	return {
                 			index: index, value: Number(item)
             			};
-            }
-		);
+             }
+        );
         
-        component.set("v.frontGears", frontList);
-        component.set("v.rearGears", rearList);        
-           
-    },
-    getApexGears: function(component)
-    {
         
-    },
-    getApexGears : function(component) {
+        component.set("v.gearSet", list);
+        
+    },  
+    getApexGears : function(component, name, params) {
         
         return new Promise
         (
             function(resolve, reject)
             {
-                const action = component.get("c.retrieveBikeGears");
+                const action = component.get(name);
                 
-                action.setParam('bikeId', '12345');
+                action.setParams(params);
                 
                 action.setCallback
                 (
@@ -82,15 +91,38 @@
 	},
 	getGears: function(component)
     {
-  		this.getApexGears(component)
+        let gearSetNameValue = (component.get("v.gearSet")[this.returnValue(component, "gearSet")].value).toString();
+        
+        
+        this.getApexGears(component, "c.retrieveBikeGears", { recordId : gearSetNameValue, type:"crankset" })
+        .then
+        (   
+        	(gearsToProcess)=>
+            {
+                this.processGears(component, "front", gearsToProcess);
+            }                
+        )
+        .then
+        (
+                ()=>
+                {
+                return this.getApexGears(component, "c.retrieveBikeGears", { recordId :gearSetNameValue, type:"cassette" })
+                }
+        )
         .then
         (   
             (gearsToProcess)=>
             {
-                this.processGears(component,gearsToProcess);
-                this.setGearRatio(component);  
+                this.processGears(component, "rear", gearsToProcess);
             }
- 
+                 
+        )
+        .then
+        (
+            ()=>
+            {
+            	    this.setGearRatio(component);  
+            }
         )
         .catch
         (
@@ -106,6 +138,30 @@
         )
         
     },
+	getGearSet: function(component)
+    {
+        this.getApexGears(component, "c.retrieveBikeGearSet", { })
+        .then
+        (   
+        	(gearSetToProcess)=>
+            {
+                this.processGearSet(component, gearSetToProcess);
+            }                
+        )
+        .catch
+        (
+          (message)=>      
+          {      
+                this.showErrorMessage
+                (
+                    component,     
+                    message,
+                    "Oh no!"
+                )           
+           }       
+        )
+        
+    },               
 	setGearRatio : function(component){
         
         const selectedFront = component.get("v.currentFrontGear"),

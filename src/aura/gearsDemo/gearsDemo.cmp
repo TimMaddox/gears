@@ -2,22 +2,24 @@
     
     <aura:attribute name="currentFrontGear" type="Integer" default="0"/>
     <aura:attribute name="currentRearGear" type="Integer" default="0"/>
+    <aura:attribute name="currentGearSet" type="Integer" default="0"/>
     <aura:attribute name="frontGears" type="Object[]"/>
     <aura:attribute name="rearGears" type="Object[]"/>
+    <aura:attribute name="gearSet" type="Object[]"/>
     <aura:attribute name="gearRatio" type="Decimal" default="0.0"/>
     <lightning:notificationsLibrary aura:id="notifLib"/>
-  
+    
     
     <aura:handler name="init" value="{!this}" action="{!c.handleInit}"/>
     <!-- Event handler for button event -->
     <aura:handler name="buttonEvent" event="c:detachedButtonEvent" action="{!c.executeShift}"/>
     <aura:attribute name="messageFromEvent" type="String"/>
     <aura:method name="reload" action="{!c.handleInit}" access="public" description="Allow explicit reload from other components"/>
-
+    
     <div> 
         <article class="slds-card">
             <div class="slds-card__header slds-grid">
-                <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                <header class="slds-media slds-media_center slds-has-flexi-truncate">          
                     <div class="slds-media__figure">
                         <span class="slds-icon_container" title="account">
                             <lightning:icon iconName="utility:automate" size="medium" />
@@ -31,10 +33,21 @@
                             </a>
                         </h2>
                     </div>
+                    
                     <div class="slds-no-flex">
-                        <!--<button class="slds-button slds-button_neutral">New</button>-->
+                        
                     </div>
                 </header>
+            </div>
+            <div class="slds-card__body slds-card__body_inner">                     
+                <div>
+                    <lightning:select aura:id="gearSet" name="gearSet" label="Gear Set " onchange="{!c.handleGearPopulation}" value="{!v.currentGearSet}">
+                        <option value="-1">Choose a gear set</option>
+                        <aura:iteration items="{!v.gearSet}" var="item">
+                            <option value="{!item.index}">{!item.value}</option>
+                        </aura:iteration>
+                    </lightning:select>
+                </div>
             </div>
             <div class="slds-card__body slds-card__body_inner">
                 <div class="body-content" style="padding: 1em; float: left; display:inline;">
