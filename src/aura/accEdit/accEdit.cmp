@@ -27,7 +27,7 @@
             
         </p>
     </lightning:card>
-    <!-- Display error message -->
+    <!-- Display an error message -->
     
         <aura:if isTrue="{!not(empty(v.recordSaveError))}">
             <div class="recordError">
